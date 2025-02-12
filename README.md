@@ -1,0 +1,3 @@
+# llm-sample
+
+本项目是关于本地使用lm-studio练习大语言模型调用的案例代码，也可以修改common/__init__.py文件中的OpenAI构建的base_url为支持OpenAI格式的任意服务地址
