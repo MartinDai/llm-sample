@@ -20,44 +20,47 @@ def chat_loop():
     )
     print("(Type 'quit' to exit)")
 
-    while True:
-        user_input = input("\nYou: ").strip()
-        if user_input.lower() == "quit":
-            break
+    try:
+        while True:
+            user_input = input("\nYou: ").strip()
+            if user_input.lower() == "quit":
+                break
 
-        messages.append({"role": "user", "content": user_input})
-        try:
-            stream_response = CLIENT.chat.completions.create(
-                model=MODEL,
-                messages=messages,
-                stream=True
-            )
+            messages.append({"role": "user", "content": user_input})
+            try:
+                stream_response = CLIENT.chat.completions.create(
+                    model=MODEL,
+                    messages=messages,
+                    stream=True
+                )
 
-            print("\nAssistant:", end=" ", flush=True)
-            collected_content = ""
-            for chunk in stream_response:
-                if chunk.choices[0].delta.content:
-                    content = chunk.choices[0].delta.content
-                    print(content, end="", flush=True)
-                    collected_content += content
-            print()  # New line after streaming completes
-            messages.append(
-                {
-                    "role": "assistant",
-                    "content": collected_content,
-                }
-            )
-        except Exception as e:
-            print(
-                f"\nError chatting with the LM Studio server!\n\n"
-                f"Please ensure:\n"
-                f"1. LM Studio server is running at 127.0.0.1:1234 (hostname:port)\n"
-                f"2. Model '{MODEL}' is downloaded\n"
-                f"3. Model '{MODEL}' is loaded, or that just-in-time model loading is enabled\n\n"
-                f"Error details: {str(e)}\n"
-                "See https://lmstudio.ai/docs/basics/server for more information"
-            )
-            exit(1)
+                print("\nAssistant:", end=" ", flush=True)
+                collected_content = ""
+                for chunk in stream_response:
+                    if chunk.choices[0].delta.content:
+                        content = chunk.choices[0].delta.content
+                        print(content, end="", flush=True)
+                        collected_content += content
+                print()  # New line after streaming completes
+                messages.append(
+                    {
+                        "role": "assistant",
+                        "content": collected_content,
+                    }
+                )
+            except Exception as e:
+                print(
+                    f"\nError chatting with the LM Studio server!\n\n"
+                    f"Please ensure:\n"
+                    f"1. LM Studio server is running at 127.0.0.1:1234 (hostname:port)\n"
+                    f"2. Model '{MODEL}' is downloaded\n"
+                    f"3. Model '{MODEL}' is loaded, or that just-in-time model loading is enabled\n\n"
+                    f"Error details: {str(e)}\n"
+                    "See https://lmstudio.ai/docs/basics/server for more information"
+                )
+                exit(1)
+    except KeyboardInterrupt:
+        print("\nYou have interrupted the program. Exiting gracefully...")
 
 if __name__ == "__main__":
     chat_loop()
