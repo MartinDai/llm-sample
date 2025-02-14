@@ -2,7 +2,7 @@
 import shutil
 import json
 from common import Spinner, MODEL, CLIENT
-from function import WIKI_TOOL, fetch_wikipedia_content
+from function import wikipedia
 
 def chat_loop():
     """
@@ -38,7 +38,7 @@ def chat_loop():
                 response = CLIENT.chat.completions.create(
                     model=MODEL,
                     messages=messages,
-                    tools=[WIKI_TOOL],
+                    tools=[wikipedia.WIKI_TOOL],
                 )
 
             if response.choices[0].message.tool_calls:
@@ -63,7 +63,7 @@ def chat_loop():
                 # Process each tool call and add results
                 for tool_call in tool_calls:
                     args = json.loads(tool_call.function.arguments)
-                    result = fetch_wikipedia_content(args["search_query"])
+                    result = wikipedia.fetch_content(args["search_query"])
 
                     # Print the Wikipedia content in a formatted way
                     terminal_width = shutil.get_terminal_size().columns

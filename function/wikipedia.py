@@ -2,7 +2,7 @@ import json
 import urllib.parse
 import urllib.request
 
-def fetch_wikipedia_content(search_query: str) -> dict:
+def fetch_content(search_query: str) -> dict:
     """Fetches wikipedia content for a given search_query"""
     try:
         # Search for most relevant article

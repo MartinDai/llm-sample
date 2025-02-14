@@ -1,1 +1,1 @@
-from .fetch_wikipedia_content import fetch_wikipedia_content, WIKI_TOOL
+from .wikipedia import fetch_content, WIKI_TOOL
